@@ -1,9 +1,7 @@
-# puts
-# puts "Please enter in a list of stock prices separated by spaces:"
-# input = gets.chomp
-# puts
-
-input = "7 8 9 7 8 8 7 6 5 8 6"
+puts
+puts "Please enter in a list of stock prices separated by spaces:"
+input = gets.chomp
+puts
 
 stock_prices = input.split(' ')
 stock_prices.each_with_index do |price, index|
@@ -20,7 +18,11 @@ sell_price = stock_prices.max
 sell_day = (stock_prices.length - 1) - stock_prices.reverse.index(sell_price)
 
 stock_prices_sorted = stock_prices.sort.uniq
-puts "uniqe stock prices sorted: #{stock_prices_sorted}"
+
+# end program if stock market had no fluctuations
+if stock_prices_sorted.length < 2
+  abort("There was no change in the market, no money to be made...")
+end
 
 if buy_day == stock_prices.length-1 # Don't buy on last day
   buy_price = stock_prices_sorted[stock_prices_sorted.index(buy_price) + 1]
@@ -39,7 +41,6 @@ if sell_day <= buy_day # if selling before buying...
   new_buy_price = buy_price
   new_buy_day = buy_day
 
-  puts "sell_day <= buy_day"
   # check gain if sell day changed
   while new_sell_day <= buy_day
     new_sell_price = stock_prices_sorted[stock_prices_sorted.index(new_sell_price) - 1]
@@ -69,6 +70,11 @@ if sell_day <= buy_day # if selling before buying...
 
 end
 
-puts
-puts "You should have bought on day #{buy_day + 1} for $#{buy_price}, and sold on "
-puts "day #{sell_day + 1} for $#{sell_price}, for a gain of $#{sell_price - buy_price}"
+if sell_price - buy_price < 0
+  puts "The market only declined over the current period. Any investment would"
+  puts "resulted in a loss."
+else
+  puts
+  puts "You should have bought on day #{buy_day + 1} for $#{buy_price}, and sold on "
+  puts "day #{sell_day + 1} for $#{sell_price}, for a gain of $#{sell_price - buy_price}"
+end
