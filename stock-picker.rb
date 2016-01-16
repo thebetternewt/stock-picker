@@ -1,7 +1,9 @@
-puts
-puts "Please enter in a list of stock prices separated by spaces:"
-input = gets.chomp
-puts
+# puts
+# puts "Please enter in a list of stock prices separated by spaces:"
+# input = gets.chomp
+# puts
+
+input = "7 8 9 7 8 8 7 6 5 8 6"
 
 stock_prices = input.split(' ')
 stock_prices.each_with_index do |price, index|
@@ -15,9 +17,10 @@ buy_price = stock_prices.min
 buy_day = stock_prices.index(buy_price)
 
 sell_price = stock_prices.max
-sell_day = stock_prices.index(sell_price)
+sell_day = (stock_prices.length - 1) - stock_prices.reverse.index(sell_price)
 
 stock_prices_sorted = stock_prices.sort.uniq
+puts "uniqe stock prices sorted: #{stock_prices_sorted}"
 
 if buy_day == stock_prices.length-1 # Don't buy on last day
   buy_price = stock_prices_sorted[stock_prices_sorted.index(buy_price) + 1]
@@ -26,7 +29,7 @@ end
 
 if sell_day == 0 # Don't sell on first day
   sell_price = stock_prices_sorted[stock_prices_sorted.index(sell_price) - 1]
-  sell_day = stock_prices.index(sell_price)
+  sell_day = (stock_prices.length - 1) - stock_prices.reverse.index(sell_price)
 end
 
 if sell_day <= buy_day # if selling before buying...
@@ -40,7 +43,7 @@ if sell_day <= buy_day # if selling before buying...
   # check gain if sell day changed
   while new_sell_day <= buy_day
     new_sell_price = stock_prices_sorted[stock_prices_sorted.index(new_sell_price) - 1]
-    new_sell_day = stock_prices.index(new_sell_price)
+    new_sell_day = (stock_prices.length - 1) - stock_prices.reverse.index(new_sell_price)
   end
   option1_gain = new_sell_price - buy_price
   option1_sell_price = new_sell_price
@@ -56,7 +59,7 @@ if sell_day <= buy_day # if selling before buying...
   option2_buy_day = new_buy_day
 
   # compare options & select highest spread
-  if option1_spread >= option2_spread
+  if option1_gain >= option2_gain
     sell_price = option1_sell_price
     sell_day = option1_sell_day
   else
